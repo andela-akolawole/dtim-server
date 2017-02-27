@@ -42,7 +42,7 @@ router.get('/testimony/pending', function (req, res) {
     });
 })
 
-router.get('/testimony/proved', function (req, res) {
+router.get('/testimony/approved', function (req, res) {
     Testimony.find({ status: 'approved' }, function (err, result) {
         if (!err) {
             res.status(200).json(result);
