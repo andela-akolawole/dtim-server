@@ -13,6 +13,10 @@ var TestimonySchema = new Schema({
     },
     status: {
         type: String
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
     }
 });
 
