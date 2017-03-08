@@ -4,7 +4,7 @@ var Testimony = require('../db/schemas/testimony');
 var Gallery = require('../db/schemas/gallery');
 
 /* GET testimony listing. */
-router.post('/testimony/submit', function(req, res) {
+router.post('/testimony/submit', function (req, res) {
     var testimony = new Testimony({
         fullName: req.body.fullName,
         testimony: req.body.testimony,
@@ -24,7 +24,7 @@ router.get('/testimony/all', function (req, res) {
                 status: 'error',
                 message: 'There is an error',
                 error: err
-            }); 
+            });
         }
     });
 })
@@ -38,13 +38,13 @@ router.get('/testimony/pending', function (req, res) {
                 status: 'error',
                 message: 'There is an error',
                 error: err
-            }); 
+            });
         }
     });
 })
 
 router.get('/testimony/approved', function (req, res) {
-    Testimony.find({ status: 'approved' }).sort({createdAt: -1}).exec(function (err, result) {
+    Testimony.find({ status: 'approved' }).sort({ createdAt: -1 }).exec(function (err, result) {
         if (!err) {
             res.status(200).json(result);
         } else {
@@ -52,7 +52,7 @@ router.get('/testimony/approved', function (req, res) {
                 status: 'error',
                 message: 'There is an error',
                 error: err
-            }); 
+            });
         }
     });
 })
@@ -66,7 +66,7 @@ router.get('/testimony/:id', function (req, res) {
                 status: 'error',
                 message: 'There is an error',
                 error: err
-            }); 
+            });
         }
     });
 });
@@ -106,13 +106,15 @@ router.get('/testimony/:id/delete', function (req, res) {
     });
 });
 
-router.get('/gallery/images', function (req, res) {
-    Gallery.find({}, null, {sort: {createdAt: -1}}, function (err, result) {
-        if (err) {
-            return res.status(500);
-        }
-        return res.status(200).json(result);
-    })
-})
+router.get('/gallery/images/', function (req, res) {
+    return Gallery.find({})
+        .sort({ createdAt: -1 })
+        .limit(req.query.limit)
+        .exec(function (err, result) {
+            return res.status(200).json(result);
+        });
+});
+
+
 
 module.exports = router;
