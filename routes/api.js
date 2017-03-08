@@ -107,9 +107,10 @@ router.get('/testimony/:id/delete', function (req, res) {
 });
 
 router.get('/gallery/images/', function (req, res) {
+    console.log(req.query);
     return Gallery.find({})
         .sort({ createdAt: -1 })
-        .limit(req.query.limit)
+        .limit(Number(req.query.limit))
         .exec(function (err, result) {
             return res.status(200).json(result);
         });
