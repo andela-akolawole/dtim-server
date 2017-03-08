@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Testimony = require('../db/schemas/testimony');
+var Gallery = require('../db/schemas/gallery');
 
 /* GET testimony listing. */
 router.post('/testimony/submit', function(req, res) {
@@ -103,6 +104,15 @@ router.get('/testimony/:id/delete', function (req, res) {
             });
         }
     });
+});
+
+router.get('/gallery/images', function (req, res) {
+    Gallery.find({}, null, {sort: {createdAt: -1}}, function (err, result) {
+        if (err) {
+            return res.status(500);
+        }
+        return res.status(200).json(result);
+    })
 })
 
 module.exports = router;
