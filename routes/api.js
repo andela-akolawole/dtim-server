@@ -1,8 +1,25 @@
 var express = require('express');
+var moment = require('moment');
+var objectAssign = require('object-assign');
 var router = express.Router();
 var Testimony = require('../db/schemas/testimony');
 var Gallery = require('../db/schemas/gallery');
 var PastorPost = require('../db/schemas/pastorPost');
+
+function formatDate(date) {
+    var monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+    ];
+
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+
+    return day + ' ' + monthNames[monthIndex] + ' ' + year;
+}
 
 /* GET testimony listing. */
 router.post('/testimony/submit', function (req, res) {
@@ -118,11 +135,17 @@ router.get('/gallery/images/', function (req, res) {
 
 router.get('/pastor-post/get', function (req, res) {
     return PastorPost.find({})
-            .exec(function (err, result){
-                if (result) {
-                    return res.json(result);
-                };
-            })
+        .exec(function (err, result) {
+            if (result) {
+                // console.log(result, 'result')
+                result = result.map(function (value) {
+                    const myDate = moment(value.createdAt).format('Do MMMM YYYY');
+                    const newObject = Object.assign({}, value.toObject(), { createdAt: myDate })
+                    return newObject;
+                });
+                return res.json(result);
+            };
+        })
 })
 
 
