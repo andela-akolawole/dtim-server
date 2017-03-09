@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Testimony = require('../db/schemas/testimony');
 var Gallery = require('../db/schemas/gallery');
+var PastorPost = require('../db/schemas/pastorPost');
 var cloudinary = require('cloudinary');
 require('dotenv').config();
 
@@ -70,7 +71,7 @@ router.get('/testimony/:id', function (req, res) {
 })
 
 router.get('/gallery', function (req, res) {
-  return Gallery.find({}, null , {sort: {createdAt: -1}}, function (err, result) {
+  return Gallery.find({}, null, { sort: { createdAt: -1 } }, function (err, result) {
     console.log(result);
     if (result.length <= 0) {
       return res.render('gallery', {
@@ -94,12 +95,63 @@ router.post('/gallery/upload_success', function (req, res) {
         url: result.url,
         name: req.files.imageUploaded.name,
         createdAt: new Date
-      }, function (err, res) {});
+      }, function (err, res) { });
     }
   }).end(req.files.imageUploaded.data);
   res.render('gallery', {
     uploadSuccess: true
   });
 });
+
+router.get('/pastor-post', function (req, res) {
+  return PastorPost.find({})
+    .sort({ createdAt: -1 })
+    .exec(function (err, result) {
+      if (result.length <= 0) {
+        console.log('got here');
+        return res.render('pastorPost', {
+          posts: []
+        });
+      }
+      return res.render('pastorPost', {
+        posts: result
+      });
+    });
+});
+
+router.get('/pastor-post/:id/view', function (req, res) {
+  return PastorPost.findById(req.params.id)
+    .exec(function (err, result) {
+      return res.render('pastorPostView', {
+        post: result
+      });
+    });
+});
+
+router.get('/pastor-post/add', function (req, res) {
+  return res.render('pastorPostAdd');
+});
+
+router.post('/pastor-post/save', function (req, res) {
+  return PastorPost.create(req.body, function (err, result) {
+      return res.redirect('/pastor-post');
+  });
+});
+
+router.post('/pastor-post/:id/update', function (req, res) {
+  return PastorPost.findByIdAndUpdate(req.params.id, {$set: req.body})
+        .exec(function (err, result) {
+          if (result) {
+            return res.redirect('/pastor-post');
+          }
+        });
+});
+
+router.get('/pastor-post/:id/delete', function (req, res) {
+  return PastorPost.findByIdAndRemove(req.params.id)
+          .exec(function (err, result) {
+            return res.redirect('/pastor-post');
+          });
+})
 
 module.exports = router;

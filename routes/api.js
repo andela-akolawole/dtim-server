@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Testimony = require('../db/schemas/testimony');
 var Gallery = require('../db/schemas/gallery');
+var PastorPost = require('../db/schemas/pastorPost');
 
 /* GET testimony listing. */
 router.post('/testimony/submit', function (req, res) {
@@ -107,7 +108,6 @@ router.get('/testimony/:id/delete', function (req, res) {
 });
 
 router.get('/gallery/images/', function (req, res) {
-    console.log(req.query);
     return Gallery.find({})
         .sort({ createdAt: -1 })
         .limit(Number(req.query.limit))
@@ -115,6 +115,15 @@ router.get('/gallery/images/', function (req, res) {
             return res.status(200).json(result);
         });
 });
+
+router.get('/pastor-post/get', function (req, res) {
+    return PastorPost.find({})
+            .exec(function (err, result){
+                if (result) {
+                    return res.json(result);
+                };
+            })
+})
 
 
 
