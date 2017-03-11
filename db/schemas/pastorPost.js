@@ -8,6 +8,9 @@ var PastorPostSchema = new Schema({
     details: {
         type: String
     },
+    imageUrl: {
+        type: String
+    },
     bibleText: {
         type: String
     },

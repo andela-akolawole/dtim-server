@@ -135,6 +135,7 @@ router.get('/gallery/images/', function (req, res) {
 
 router.get('/pastor-post/get', function (req, res) {
     return PastorPost.find({})
+        .limit(Number(req.query.limit))
         .sort({createdAt: -1})
         .exec(function (err, result) {
             if (result) {

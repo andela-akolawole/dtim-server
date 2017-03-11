@@ -133,25 +133,34 @@ router.get('/pastor-post/add', function (req, res) {
 });
 
 router.post('/pastor-post/save', function (req, res) {
-  return PastorPost.create(req.body, function (err, result) {
-      return res.redirect('/pastor-post');
-  });
+  console.log(req.files);
+  cloudinary.uploader.upload_stream((result) => {
+    if (result) {
+      req.body.imageUrl = result.url;
+      return PastorPost.create(req.body, function (err, result) {
+      });
+    }
+  }).end(req.files.imageUploaded.data);
+  return res.redirect('/pastor-post');
 });
 
 router.post('/pastor-post/:id/update', function (req, res) {
-  return PastorPost.findByIdAndUpdate(req.params.id, {$set: req.body})
+  cloudinary.uploader.upload_stream((result) => {
+    if (result) {
+      req.body.imageUrl = result.url;
+      return PastorPost.findByIdAndUpdate(req.params.id, { $set: req.body })
         .exec(function (err, result) {
-          if (result) {
-            return res.redirect('/pastor-post');
-          }
         });
+    }
+  }).end(req.files.imageUploaded.data);
+  return res.redirect('/pastor-post');
 });
 
 router.get('/pastor-post/:id/delete', function (req, res) {
   return PastorPost.findByIdAndRemove(req.params.id)
-          .exec(function (err, result) {
-            return res.redirect('/pastor-post');
-          });
+    .exec(function (err, result) {
+      return res.redirect('/pastor-post');
+    });
 })
 
 module.exports = router;

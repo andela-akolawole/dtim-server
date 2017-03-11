@@ -5,27 +5,27 @@
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span class="glyphicon glyphicon-th-large"></span>
                 </button>
-                <!-- Brand and toggle get grouped for better mobile display -->
+            <!-- Brand and toggle get grouped for better mobile display -->
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="menuBar">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <a href="/">Home</a>
-                        </li>
-                        <li>
-                            <a href="/testimony">Testimony</a>
-                        </li>
-                        <li>
-                            <a href="/gallery">Gallery</a>
-                        </li>
-                        <li class="active">
-                            <a href="/pastor-post">Pastor's post</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
-                <!-- /.container-fluid -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="menuBar">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a href="/testimony">Testimony</a>
+                    </li>
+                    <li>
+                        <a href="/gallery">Gallery</a>
+                    </li>
+                    <li class="active">
+                        <a href="/pastor-post">Pastor's post</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+            <!-- /.container-fluid -->
         </nav>
     </div>
 </div>
@@ -34,7 +34,7 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="col-body">
             <div class="row">
-                <form action="/pastor-post/{{post._id}}/update" method="post">
+                <form action="/pastor-post/{{post._id}}/update" method="post" enctype="multipart/form-data">
                     <div class="col-md-6">
                         <input class="form-control no-round" placeholder="Title" name="title" value="{{post.title}}" />
                     </div>
@@ -43,6 +43,15 @@
                     </div>
                     <div class="col-md-12 space-top">
                         <textarea class="form-control no-round limit-textarea" name="details" placeholder="Details">{{post.details}}</textarea>
+                    </div>
+                    <div class="col-md-6 space-top">
+                        <div class="viewImage">
+                            <img class="img-responsive" src="{{post.imageUrl}}" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 space-top">
+                        <label class="btn btn-success no-round" for="postImage">Change Image</label>
+                        <input class="hidden" type="file" id="postImage" name="imageUploaded" />
                     </div>
                     <div class="col-md-12 space-top">
                         <input class="hidden" name="redirect" value="redirect" />
