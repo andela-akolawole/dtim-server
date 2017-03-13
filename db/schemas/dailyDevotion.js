@@ -1,7 +1,7 @@
 var mongoose = require('../connect');
 var Schema = mongoose.Schema;
 
-var PastorPostSchema = new Schema({
+var DailyDevotion = new Schema({
     title: {
         type: String,
     },
@@ -23,4 +23,4 @@ var PastorPostSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('PastorPost', PastorPostSchema);
+module.exports = mongoose.model('DailyDevotion', DailyDevotion);

@@ -19,10 +19,10 @@
                         <li>
                             <a href="/gallery">Gallery</a>
                         </li>
-                        <li class="active">
+                        <li>
                             <a href="/pastor-post">Pastor's post</a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="/daily-devotion">Daily Devotion</a>
                         </li>
                     </ul>
@@ -37,14 +37,14 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="row">
             <div class="col-md-12">
-                <a href="/pastor-post/add" class="btn btn-primary pull-right no-round ">Add Post</a>
+                <a href="/daily-devotion/add" class="btn btn-primary pull-right no-round ">Add Devotion</a>
             </div>
         </div>
         <div class="col-body space-top">
             <div class="row">
                 <div class="col-md-12">
                     {{#each posts}}
-                    <a href="/pastor-post/{{this._id}}/view">
+                    <a href="/daily-devotion/{{this._id}}/view">
                         <div class="post-list">
                             <div class="post-title">
                                 {{this.title}}

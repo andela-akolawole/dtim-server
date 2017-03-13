@@ -3,6 +3,8 @@ var router = express.Router();
 var Testimony = require('../db/schemas/testimony');
 var Gallery = require('../db/schemas/gallery');
 var PastorPost = require('../db/schemas/pastorPost');
+var PastorPicture = require('../db/schemas/pastorPicture');
+var DailyDevotion = require('../db/schemas/dailyDevotion');
 var cloudinary = require('cloudinary');
 require('dotenv').config();
 
@@ -14,7 +16,13 @@ cloudinary.config({
 
 /* GET home page. */
 router.get('/', function (req, res) {
-  res.render('index', { title: 'Express' });
+  return PastorPicture.find({}).exec(function (err, result) {
+
+    if (result.length >= 1) {
+      return res.render('index', { pastorPic: result[0] });
+    }
+    return res.render('index', { noPic: true });
+  });
 });
 
 // Get testimony page 
@@ -133,7 +141,6 @@ router.get('/pastor-post/add', function (req, res) {
 });
 
 router.post('/pastor-post/save', function (req, res) {
-  console.log(req.files);
   cloudinary.uploader.upload_stream((result) => {
     if (result) {
       req.body.imageUrl = result.url;
@@ -145,19 +152,109 @@ router.post('/pastor-post/save', function (req, res) {
 });
 
 router.post('/pastor-post/:id/update', function (req, res) {
-  cloudinary.uploader.upload_stream((result) => {
-    if (result) {
-      req.body.imageUrl = result.url;
-      return PastorPost.findByIdAndUpdate(req.params.id, { $set: req.body })
-        .exec(function (err, result) {
-        });
-    }
-  }).end(req.files.imageUploaded.data);
+  if (req.files.imageUploaded) {
+    cloudinary.uploader.upload_stream((result) => {
+      if (result) {
+        req.body.imageUrl = result.url;
+        return PastorPost.findByIdAndUpdate(req.params.id, { $set: req.body })
+          .exec(function (err, result) {
+          });
+      }
+    }).end(req.files.imageUploaded.data);
+    return res.redirect('/pastor-post');
+  }
+  PastorPost.findByIdAndUpdate(req.params.id, { $set: req.body })
+    .exec(function (err, result) {
+    });
   return res.redirect('/pastor-post');
 });
 
 router.get('/pastor-post/:id/delete', function (req, res) {
   return PastorPost.findByIdAndRemove(req.params.id)
+    .exec(function (err, result) {
+      return res.redirect('/pastor-post');
+    });
+});
+
+router.post('/pastor-picture/add', function (req, res) {
+  cloudinary.uploader.upload_stream((result) => {
+    if (result) {
+      req.body.url = result.url;
+      return PastorPicture.create(req.body, function (err, res) { })
+    }
+  }).end(req.files.imageUploaded.data);
+  return res.redirect('/');
+});
+
+router.post('/pastor-picture/:id/update', function (req, res) {
+  cloudinary.uploader.upload_stream((result) => {
+    if (result) {
+      req.body.url = result.url;
+      return PastorPicture.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, res) { })
+    }
+  }).end(req.files.imageUploaded.data);
+  res.redirect('/');
+});
+
+router.get('/daily-devotion', function (req, res) {
+  return DailyDevotion.find({})
+    .sort({ createdAt: -1 })
+    .exec(function (err, result) {
+      if (result.length <= 0) {
+        console.log('got here');
+        return res.render('dailyDevotion', {
+          posts: []
+        });
+      }
+      return res.render('dailyDevotion', {
+        posts: result
+      });
+    });
+});
+
+router.get('/daily-devotion/add', function (req, res) {
+  res.render('dailyDevotionAdd');
+})
+
+router.post('/daily-devotion/save', function (req, res) {
+  cloudinary.uploader.upload_stream((result) => {
+    if (result) {
+      req.body.imageUrl = result.url;
+      return DailyDevotion.create(req.body, function (err, res) { })
+    }
+  }).end(req.files.imageUploaded.data);
+  return res.redirect('/');
+});
+
+router.get('/daily-devotion/:id/view', function (req, res) {
+  return DailyDevotion.findById(req.params.id)
+    .exec(function (err, result) {
+      return res.render('dailyDevotionView', {
+        post: result
+      });
+    });
+});
+
+router.post('/daily-devotion/:id/update', function (req, res) {
+  if (req.files.imageUploaded) {
+    cloudinary.uploader.upload_stream((result) => {
+      if (result) {
+        req.body.imageUrl = result.url;
+        return DailyDevotion.findByIdAndUpdate(req.params.id, { $set: req.body })
+          .exec(function (err, result) {
+          });
+      }
+    }).end(req.files.imageUploaded.data);
+    return res.redirect('/daily-devotion');
+  }
+  DailyDevotion.findByIdAndUpdate(req.params.id, { $set: req.body })
+    .exec(function (err, result) {
+    });
+  return res.redirect('/daily-devotion');
+});
+
+router.get('/daily-devotion/:id/delete', function (req, res) {
+  return DailyDevotion.findByIdAndRemove(req.params.id)
     .exec(function (err, result) {
       return res.redirect('/pastor-post');
     });

@@ -27,6 +27,8 @@
                     </li>
                 </ul>
             </div>
+            <!-- /.navbar-collapse -->
+            <!-- /.container-fluid -->
         </nav>
     </div>
 </div>
@@ -35,26 +37,32 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="col-body">
             <div class="row">
-                <form action="/pastor-post/save" method="post" enctype="multipart/form-data">
+                <form action="/daily-devotion/{{post._id}}/update" method="post" enctype="multipart/form-data">
                     <div class="col-md-6">
                         <input class="form-control no-round" placeholder="Title" name="title" value="{{post.title}}" />
                     </div>
                     <div class="col-md-6">
                         <input class="form-control no-round" placeholder="Bible Text" name="bibleText" value="{{post.bibleText}}" />
                     </div>
-                    <div class="col-md-6" style="margin-top: 10px;">
-                        <label class="btn btn-success no-round" for="fileUpload">Upload Image</label>
-                        <input type="file" id="fileUpload" name="imageUploaded" class="hidden" />
-                    </div>
-                    <div class="col-md-6" style="margin-top: 10px;">
-                        <input type="text" class="form-control no-round" placeholder="Author" name="author" />
+                    <div class="col-md-6 space-top">
+                        <input class="form-control no-round" placeholder="Author" name="bibleText" value="{{post.author}}" />
                     </div>
                     <div class="col-md-12 space-top">
                         <textarea class="form-control no-round limit-textarea" name="details" placeholder="Details">{{post.details}}</textarea>
                     </div>
+                    <div class="col-md-6 space-top">
+                        <div class="viewImage">
+                            <img class="img-responsive" src="{{post.imageUrl}}" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 space-top">
+                        <label class="btn btn-success no-round" for="postImage">Change Image</label>
+                        <input class="hidden" type="file" id="postImage" name="imageUploaded" />
+                    </div>
                     <div class="col-md-12 space-top">
                         <input class="hidden" name="redirect" value="redirect" />
                         <button type="submit" class="btn-success btn no-round">Save</button>
+                        <a href="/daily-devotion/{{post._id}}/delete" class="pull-right btn-danger btn no-round">Delete</a>
                     </div>
                 </form>
             </div>

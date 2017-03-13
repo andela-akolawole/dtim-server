@@ -22,6 +22,9 @@
                     <li class="active">
                         <a href="/pastor-post">Pastor's post</a>
                     </li>
+                    <li>
+                        <a href="/daily-devotion">Daily Devotion</a>
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -40,6 +43,9 @@
                     </div>
                     <div class="col-md-6">
                         <input class="form-control no-round" placeholder="Bible Text" name="bibleText" value="{{post.bibleText}}" />
+                    </div>
+                    <div class="col-md-6 space-top">
+                        <input class="form-control no-round" placeholder="Author" name="bibleText" value="{{post.author}}" />
                     </div>
                     <div class="col-md-12 space-top">
                         <textarea class="form-control no-round limit-textarea" name="details" placeholder="Details">{{post.details}}</textarea>

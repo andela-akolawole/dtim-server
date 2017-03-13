@@ -3,6 +3,7 @@ var moment = require('moment');
 var objectAssign = require('object-assign');
 var router = express.Router();
 var Testimony = require('../db/schemas/testimony');
+var DailyDevotion = require('../db/schemas/dailyDevotion');
 var Gallery = require('../db/schemas/gallery');
 var PastorPost = require('../db/schemas/pastorPost');
 
@@ -148,8 +149,22 @@ router.get('/pastor-post/get', function (req, res) {
                 return res.json(result);
             };
         })
-})
+});
 
-
-
+router.get('/daily-devotion/get', function (req, res) {
+    return DailyDevotion.find({})
+        .limit(Number(req.query.limit))
+        .sort({createdAt: -1})
+        .exec(function (err, result) {
+            if (result) {
+                // console.log(result, 'result')
+                result = result.map(function (value) {
+                    const myDate = moment(value.createdAt).format('Do MMMM YYYY');
+                    const newObject = Object.assign({}, value.toObject(), { createdAt: myDate })
+                    return newObject;
+                });
+                return res.json(result);
+            };
+        })
+});
 module.exports = router;
