@@ -4,6 +4,7 @@ var objectAssign = require('object-assign');
 var router = express.Router();
 var Testimony = require('../db/schemas/testimony');
 var DailyDevotion = require('../db/schemas/dailyDevotion');
+var PastorPicture = require('../db/schemas/pastorPicture');
 var Gallery = require('../db/schemas/gallery');
 var PastorPost = require('../db/schemas/pastorPost');
 
@@ -137,7 +138,7 @@ router.get('/gallery/images/', function (req, res) {
 router.get('/pastor-post/get', function (req, res) {
     return PastorPost.find({})
         .limit(Number(req.query.limit))
-        .sort({createdAt: -1})
+        .sort({ createdAt: -1 })
         .exec(function (err, result) {
             if (result) {
                 // console.log(result, 'result')
@@ -154,7 +155,7 @@ router.get('/pastor-post/get', function (req, res) {
 router.get('/daily-devotion/get', function (req, res) {
     return DailyDevotion.find({})
         .limit(Number(req.query.limit))
-        .sort({createdAt: -1})
+        .sort({ createdAt: -1 })
         .exec(function (err, result) {
             if (result) {
                 // console.log(result, 'result')
@@ -167,4 +168,10 @@ router.get('/daily-devotion/get', function (req, res) {
             };
         })
 });
+
+router.get('/pastor-picture/get', function (req, res) {
+    return PastorPicture.find({}).exec(function (err, result) {
+        return res.status(200).json(result[0]);
+    });
+})
 module.exports = router;

@@ -47,15 +47,15 @@
             {{/if}} {{#if pastorPic}}
             <div class="col-md-6">
                 <label> Pastor's Picture</label>
-                <div class="pastor-pic">
+                <div class="pastor-pic" style="margin-bottom: 50px;">
                     <img src="{{pastorPic.url}}" class="img-responsive" />
-                </div>
+                </div> 
                 <form action="/pastor-picture/{{pastorPic._id}}/update" method="post" enctype="multipart/form-data">
                     <label for="changePic" class="btn btn-primary no-round"> Change Image</label>
                     <input type="file" id="changePic" name="imageUploaded" class="hidden" />
                     <button type="submit" class="btn btn-success no-round pull-right"> Save</a>
-                    </form>
-                </div>
+                </form>
+            </div>
             {{/if}}
         </div>
     </div>
