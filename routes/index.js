@@ -4,6 +4,7 @@ var Testimony = require('../db/schemas/testimony');
 var Gallery = require('../db/schemas/gallery');
 var PastorPost = require('../db/schemas/pastorPost');
 var PastorPicture = require('../db/schemas/pastorPicture');
+var Ebook = require('../db/schemas/ebook');
 var DailyDevotion = require('../db/schemas/dailyDevotion');
 var cloudinary = require('cloudinary');
 require('dotenv').config();
@@ -96,8 +97,9 @@ router.get('/gallery', function (req, res) {
 });
 
 router.post('/gallery/upload_success', function (req, res) {
-  console.log(req.files.imageUploaded.path);
+  console.log(req.files.imageUploaded, "result");
   cloudinary.uploader.upload_stream((result) => {
+    console.log(result, "result");
     if (result) {
       Gallery.create({
         url: result.url,
@@ -258,6 +260,73 @@ router.get('/daily-devotion/:id/delete', function (req, res) {
     .exec(function (err, result) {
       return res.redirect('/pastor-post');
     });
+});
+
+router.get('/ebook', function (req, res) {
+  return Ebook.find()
+    .sort({ createdAt: -1 })
+    .exec(function (err, result) {
+      if (result.length <= 0) {
+        return res.render('ebook', {
+          books: []
+        });
+      }
+      return res.render('ebook', {
+        books: result
+      });
+    });
+});
+
+router.get('/ebook/add', function (req, res) {
+  return res.render('ebookAdd');
+});
+
+router.post('/ebook/add', function (req, res) {
+  cloudinary.uploader.upload_stream((result) => {
+    if (result) {
+      req.body.bookCover = result.url;
+      return Ebook.create(req.body, function (err, res) { })
+    }
+  }).end(req.files.bookCover.data);
+  return res.redirect('/');
+});
+
+router.get('/ebook/:id/view', function (req, res) {
+  return Ebook.findById(req.params.id)
+    .exec(function (err, result) {
+      if (result) {
+        res.render('ebookView', {
+          book: result
+        });
+      }
+    })
+});
+
+router.post('/ebook/:id/update', function (req, res) {
+  if (req.files.bookCover) {
+    cloudinary.uploader.upload_stream((result) => {
+      if (result) {
+        req.body.bookCover = result.url;
+        return Ebook.findByIdAndUpdate(req.params.id, { $set: req.body })
+          .exec(function (err, result) {
+          });
+      }
+    }).end(req.files.bookCover.data);
+    return res.redirect('/ebook');
+  }
+  Ebook.findByIdAndUpdate(req.params.id, { $set: req.body })
+    .exec(function (err, result) {
+    });
+  return res.redirect('/ebook');
+});
+
+router.get('/ebook/:id/delete', function (req, res) {
+  return Ebook.findByIdAndRemove(req.params.id)
+    .exec(function (err, result) {
+      return res.redirect('/ebook');
+    });
 })
+
+
 
 module.exports = router;

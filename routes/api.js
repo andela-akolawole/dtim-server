@@ -4,6 +4,7 @@ var objectAssign = require('object-assign');
 var router = express.Router();
 var Testimony = require('../db/schemas/testimony');
 var DailyDevotion = require('../db/schemas/dailyDevotion');
+var Ebook = require('../db/schemas/ebook');
 var PastorPicture = require('../db/schemas/pastorPicture');
 var Gallery = require('../db/schemas/gallery');
 var PastorPost = require('../db/schemas/pastorPost');
@@ -173,5 +174,13 @@ router.get('/pastor-picture/get', function (req, res) {
     return PastorPicture.find({}).exec(function (err, result) {
         return res.status(200).json(result[0]);
     });
-})
+});
+
+router.get('/ebook/get', function (req, res) {
+    return Ebook.find({})
+        .sort({ createdAt: -1 })
+        .exec(function (err, result) {
+            res.json(result);
+        });
+});
 module.exports = router;

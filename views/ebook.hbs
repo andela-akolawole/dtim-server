@@ -1,10 +1,10 @@
 <div class="row">
     <div class="col-md-7 col-md-offset-3 col-sm-4">
         <nav class="navbar navbar-inverse">
-            <button class="navbar-toggle navbar-toggle-right" type="button" data-toggle="collapse" data-target="#menuBar"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggle navbar-toggle-right" type="button" data-toggle="collapse" data-target="#menuBar" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
                 <span class="glyphicon glyphicon-th-large"></span>
-            </button>
+                </button>
                 <!-- Brand and toggle get grouped for better mobile display -->
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -16,7 +16,7 @@
                         <li>
                             <a href="/testimony">Testimony</a>
                         </li>
-                        <li class="active">
+                        <li>
                             <a href="/gallery">Gallery</a>
                         </li>
                         <li>
@@ -25,7 +25,7 @@
                         <li>
                             <a href="/daily-devotion">Daily Devotion</a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="/ebook">Ebooks</a>
                         </li>
                     </ul>
@@ -35,40 +35,32 @@
         </nav>
     </div>
 </div>
+
 <div class="row space-top">
     <div class="col-md-6 col-md-offset-3">
         <div class="row">
-            <form action="/gallery/upload_success" method="post" enctype="multipart/form-data">
-                <div class="col-md-12">
-                    {{#if uploadSuccess}}
-                    <div class="alert alert-success">
-                        File successfully uploaded
-                    </div>
-                    {{/if}}
-                </div>
-                <div class="col-md-6">
-                    <label class="btn btn-primary no-round pull-left" for="image-upload" style="margin-bottom: 20px;"> Upload Image</label>
-                    <input name="imageUploaded" id="image-upload" class="hidden" type="file">
-                </div>
-                <div class="col-md-6">
-                    <button type="submit" class="btn btn-success no-round pull-right">Save</button>
-                </div>
-            </form>
-        </div>
-        <div class="col-body">
-            <div class="row">
-                {{#if noImages}}
-                <h3> No Images Yet </h3>
-                {{/if}} 
-                {{#each images}}
-                    <div class="col-md-6 margin-bottom">
-                        <div class="image">
-                            <img class="img-responsive" src="{{this.url}}" />
-                        </div>
-                    </div>
-                {{/each}}
+            <div class="col-md-12">
+                <a href="/ebook/add" class="btn btn-primary pull-right no-round ">Add Ebook</a>
             </div>
-
+        </div>
+        <div class="col-body space-top">
+            <div class="row">
+                <div class="col-md-12">
+                    {{#each books}}
+                    <a href="/ebook/{{this._id}}/view">
+                        <div class="post-list">
+                            <div class="post-title">
+                                {{this.bookName}}
+                            </div>
+                        </div>
+                    </a>
+                    {{else}}
+                    <div class="post-list">
+                        <h3> No ebooks yet</h3>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
         </div>
     </div>
 </div>
